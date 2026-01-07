@@ -1,0 +1,380 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #000000;
+    overflow: hidden;
+    color: #00d4ff;
+    user-select: none;
+}
+
+/* Video Element (NOW VISIBLE as background) */
+#videoElement {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%) scaleX(-1);
+    z-index: 0;
+    object-fit: cover;
+}
+
+/* AR Canvas (for hand landmarks and drawing overlay) */
+#arCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* WebGL Container (for 3D objects) */
+#webglContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#webglContainer canvas {
+    transform: scaleX(-1);
+}
+
+/* UI Overlay */
+#uiOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* HUD Panels */
+.hud-panel {
+    position: absolute;
+    background: rgba(0, 10, 20, 0.85);
+    border: 2px solid #00d4ff;
+    border-radius: 8px;
+    padding: 15px 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5),
+                inset 0 0 20px rgba(0, 212, 255, 0.15);
+    animation: panelGlow 2s ease-in-out infinite;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+}
+
+@keyframes panelGlow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 
+                    inset 0 0 15px rgba(0, 212, 255, 0.1); 
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 
+                    inset 0 0 25px rgba(0, 212, 255, 0.2); 
+    }
+}
+
+/* Top Panel */
+.top-panel {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.hud-text {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px #00d4ff;
+}
+
+.hud-status {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.separator {
+    color: #00d4ff;
+    opacity: 0.5;
+}
+
+/* Left Panel */
+.left-panel {
+    top: 100px;
+    left: 20px;
+    width: 250px;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+}
+
+.left-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.left-panel::-webkit-scrollbar-track {
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.left-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.5);
+    border-radius: 4px;
+}
+
+.left-panel.hidden {
+    transform: translateX(-300px);
+}
+
+/* Right Panel */
+.right-panel {
+    top: 100px;
+    right: 20px;
+    width: 250px;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+}
+
+.right-panel.hidden {
+    transform: translateX(300px);
+}
+
+/* Bottom Panel */
+.bottom-panel {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 90%;
+}
+
+.instruction {
+    font-size: 13px;
+    text-align: center;
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+    line-height: 1.6;
+}
+
+/* Panel Content */
+.panel-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #00d4ff;
+    text-shadow: 0 0 12px #00d4ff;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    margin: 8px 0;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    background: rgba(0, 212, 255, 0.3);
+    border-color: #00d4ff;
+    transform: translateX(5px);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+
+.menu-item:active {
+    transform: translateX(3px) scale(0.98);
+}
+
+.menu-item .icon {
+    font-size: 20px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item .label {
+    opacity: 0.7;
+}
+
+.info-item span:last-child {
+    font-weight: bold;
+    text-shadow: 0 0 8px #00d4ff;
+}
+
+/* Loading Screen */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+#loadingScreen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 80px;
+    height: 80px;
+    border: 4px solid rgba(0, 212, 255, 0.1);
+    border-top: 4px solid #00d4ff;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 24px;
+    color: #00d4ff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px #00d4ff;
+}
+
+.loading-subtext {
+    font-size: 14px;
+    color: #00d4ff;
+    opacity: 0.7;
+}
+
+/* Delete Mode Active Indicator */
+.menu-item[data-action="delete-mode"].active {
+    background: rgba(255, 0, 102, 0.3);
+    border-color: #ff0066;
+}
+
+.menu-item[data-action="delete-mode"].active:hover {
+    background: rgba(255, 0, 102, 0.5);
+    box-shadow: 0 0 20px rgba(255, 0, 102, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .left-panel, .right-panel {
+        width: 200px;
+        padding: 10px;
+    }
+
+    .top-panel {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 15px;
+    }
+
+    .hud-text {
+        font-size: 16px;
+    }
+
+    .menu-item {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .instruction {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .left-panel, .right-panel {
+        width: 160px;
+        font-size: 12px;
+    }
+
+    .menu-item .icon {
+        font-size: 16px;
+    }
+}
+
+/* Hand Landmark Styles (for canvas drawing) */
+.landmark-point {
+    fill: #00d4ff;
+    filter: drop-shadow(0 0 5px #00d4ff);
+}
+
+.landmark-connection {
+    stroke: #00ff88;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 3px #00ff88);
+}
+
+/* Particle Effects */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00d4ff;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particleFade 1s ease-out forwards;
+    z-index: 10;
+}
+
+@keyframes particleFade {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0);
+    }
+}
+
+/* Pulse Animation for Active Mode */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.pulse-animation {
+    animation: pulse 1s ease-in-out infinite;
+}

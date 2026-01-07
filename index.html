@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Man AR - Two Hand Gestures</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Video feed (visible with AR overlay) -->
+    <video id="videoElement" autoplay playsinline></video>
+
+    <!-- AR Overlay Canvas (for hand landmarks and drawing) -->
+    <canvas id="arCanvas"></canvas>
+
+    <!-- 3D WebGL Container -->
+    <div id="webglContainer"></div>
+
+    <!-- UI Overlay -->
+    <div id="uiOverlay">
+        <!-- Top HUD -->
+        <div class="hud-panel top-panel">
+            <div class="hud-text">JARVIS TWO-HAND AR INTERFACE</div>
+            <div class="hud-status">
+                <span id="gestureStatus">Initializing...</span>
+                <span class="separator">|</span>
+                <span id="fpsCounter">FPS: 0</span>
+            </div>
+        </div>
+
+        <!-- Left Menu Panel -->
+        <div class="hud-panel left-panel" id="leftPanel">
+            <div class="panel-header">SHAPE SELECTION</div>
+            <div class="menu-item active" data-action="select-cube">
+                <span class="icon">🔲</span>
+                <span>Cube</span>
+            </div>
+            <div class="menu-item" data-action="select-sphere">
+                <span class="icon">🔵</span>
+                <span>Sphere</span>
+            </div>
+            <div class="menu-item" data-action="select-pyramid">
+                <span class="icon">🔺</span>
+                <span>Pyramid</span>
+            </div>
+            <div class="menu-item" data-action="select-torus">
+                <span class="icon">⭕</span>
+                <span>Torus</span>
+            </div>
+
+            <div class="panel-header" style="margin-top: 20px;">CONTROLS</div>
+            <div class="menu-item" data-action="clear">
+                <span class="icon">🗑️</span>
+                <span>Clear Drawing</span>
+            </div>
+            <div class="menu-item" data-action="toggle-camera">
+                <span class="icon">📷</span>
+                <span>Toggle Camera</span>
+            </div>
+            <div class="menu-item" data-action="toggle-landmarks">
+                <span class="icon">✋</span>
+                <span>Toggle Landmarks</span>
+            </div>
+            <div class="menu-item" data-action="delete-mode">
+                <span class="icon">❌</span>
+                <span id="deleteModeText">Delete Mode: OFF</span>
+            </div>
+            <div class="menu-item" data-action="change-color">
+                <span class="icon">🎨</span>
+                <span>Change Color</span>
+            </div>
+            <div class="menu-item" data-action="clear-all">
+                <span class="icon">💣</span>
+                <span>Clear All Objects</span>
+            </div>
+        </div>
+
+        <!-- Right Info Panel -->
+        <div class="hud-panel right-panel" id="rightPanel">
+            <div class="panel-header">STATUS</div>
+            <div class="info-item">
+                <span class="label">Gestures:</span>
+                <span id="currentGesture">None</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Hands:</span>
+                <span id="handDetected">Not Detected</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Objects:</span>
+                <span id="objectCount">0</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Mode:</span>
+                <span id="currentMode">Ready</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Selected:</span>
+                <span id="selectedShape">Cube</span>
+            </div>
+        </div>
+
+        <!-- Bottom Instructions -->
+        <div class="hud-panel bottom-panel">
+            <div class="instruction">
+                🔥 TWO-HAND MODE: Raise one hand 👋 + Pinch other 🤏 = SPAWN & RESIZE objects!<br>
+                📏 Pinch distance = Object size | Move pinch hand = Position | Both pinch = Rotate
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Initializing Two-Hand AR Interface</div>
+            <div class="loading-subtext">Requesting camera access for both hands...</div>
+        </div>
+    </div>
+
+    <!-- Import Three.js and MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <script src="app.js"></script>
+</body>
+</html>
